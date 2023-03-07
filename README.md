@@ -6,7 +6,10 @@
 # Licenses
 
 *  zlib
-    1.  [SFML](https://github.com/SFML/SFML)
+    1.  [SFML](https://github.com/SFML/SFML), version 2.5.1
  
 *  SIL OPEN FONT LICENSE Version 1.1
-    1.   [Cascadia Code](https://github.com/microsoft/cascadia-code)
+    1.  [Cascadia Code](https://github.com/microsoft/cascadia-code), version 2111.01
+
+# Notice
+    This project can only used for personal learning and study.
