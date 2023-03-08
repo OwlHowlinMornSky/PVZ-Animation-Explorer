@@ -12,4 +12,4 @@
     1.  [Cascadia Code](https://github.com/microsoft/cascadia-code), version 2111.01
 
 # Notice
-  These code can only be used for personal learning and study.
+  This programme can only be used for personal learning and study.
