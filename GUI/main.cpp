@@ -1,4 +1,4 @@
-/**
+ï»¿/**
 * @file    main.cpp
 * @author  Tyler Parret True (OwlHowlinMornSky) <mysteryworldgod@outlook.com>
 *
@@ -79,8 +79,8 @@ int main() {
 	//testdata.load("assets/test/Cabbagepult.reanim");
 	//testdata.load("assets/test/Blover.reanim");
 	//testdata.load("assets/test/CrazyDave.reanim");
-	//testdata.load("assets/Sunflower.reanim");
-	testdata.load("assets/PeaShooter.reanim");
+	testdata.load("assets/Sunflower.reanim");
+	//testdata.load("assets/PeaShooter.reanim");
 
 	//testdata.listTrack();
 	testdata.listControlTrack();
@@ -92,9 +92,9 @@ int main() {
 	//if (!test->setAnimation("anim_pogo")) {
 	//if (!test->setAnimation("anim_shooting")) {
 	//if (!test->setAnimation("anim_loop")) {
-	//if (!test->setAnimation("anim_idle")) {
+	if (!test->setAnimation("anim_idle")) {
 	//if (!test->setAnimation("anim_full_idle")) {
-	if (!test->setAnimation("anim_head_idle")) {
+	//if (!test->setAnimation("anim_head_idle")) {
 	//if (!test->setAnimation("anim_idle_handing")) {
 	//if (!test->setAnimation("anim_blink")) {
 	//if (!test->setAnimation("anim_grab")) {
@@ -268,7 +268,7 @@ void update_textTimeScale() {
 
 void update_textTrans() {
 	wchar_t tmp[64];
-	swprintf_s(tmp, 64, L"Scale: %.1f%%.\nRotate: %.1f¡ã.", scaleRatio, rotateRatio);
+	swprintf_s(tmp, 64, L"Scale: %.1f%%.\nRotate: %.1fÂ°.", scaleRatio, rotateRatio);
 	return textTrans.setString(tmp);
 }
 
