@@ -1,13 +1,13 @@
 ﻿/**
-* @file    main.cpp
-* @author  Tyler Parret True (OwlHowlinMornSky) <mysteryworldgod@outlook.com>
+*              PVZ Animation Explorer
+* 
+*    Copyright (c) 2023-2024  Tyler Parret True
 *
 * @section LICENSE
 * 
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
 *
-*    Copyright (c) 2023  Tyler Parret True
 * 
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published
@@ -22,9 +22,7 @@
 *    You should have received a copy of the GNU Affero General Public License
 *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 *
-* @section DESCRIPTION
-*
-* Where this programme starts.
+* @author  Tyler Parret True (OwlHowlinMornSky) <mysteryworldgod@outlook.com>
 */
 
 #include "AnimationCore/Animate.h"
@@ -73,12 +71,12 @@ int main() {
 	update_textTimeScale();
 
 	ohms::pvzanim::AnimData testdata;
-	//testdata.load("assets/test/Zombie.reanim");
-	//testdata.load("assets/test/Zombie_polevaulter.reanim");
-	//testdata.load("assets/test/Zombie_pogo.reanim");
-	//testdata.load("assets/test/Cabbagepult.reanim");
-	//testdata.load("assets/test/Blover.reanim");
-	//testdata.load("assets/test/CrazyDave.reanim");
+	//testdata.load("assets/Zombie.reanim");
+	//testdata.load("assets/Zombie_polevaulter.reanim");
+	//testdata.load("assets/Zombie_pogo.reanim");
+	//testdata.load("assets/Cabbagepult.reanim");
+	//testdata.load("assets/Blover.reanim");
+	//testdata.load("assets/CrazyDave.reanim");
 	testdata.load("assets/Sunflower.reanim");
 	//testdata.load("assets/PeaShooter.reanim");
 
