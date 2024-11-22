@@ -60,6 +60,8 @@ public:
 
 	const std::string& getFrameInfoString() const;
 
+	void renderToFrames(size_t totalFrameInterval); // Frame Count = Frame Interval + 1;
+
 protected:
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

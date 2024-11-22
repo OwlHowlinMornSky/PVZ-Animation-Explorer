@@ -77,7 +77,8 @@ int main() {
 	//testdata.load("assets/Cabbagepult.reanim");
 	//testdata.load("assets/Blover.reanim");
 	//testdata.load("assets/CrazyDave.reanim");
-	testdata.load("assets/Sunflower.reanim");
+	//testdata.load("assets/Sunflower.reanim");
+	testdata.load("assets/Chomper.reanim");
 	//testdata.load("assets/PeaShooter.reanim");
 
 	//testdata.listTrack();
@@ -99,6 +100,9 @@ int main() {
 	//if (!test->setAnimation("anim_enterup")) {
 		return 0;
 	}
+
+	test->renderToFrames(60);
+	return 0;
 
 	initialize_window();
 
