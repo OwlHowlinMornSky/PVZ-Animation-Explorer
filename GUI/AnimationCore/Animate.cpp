@@ -257,9 +257,12 @@ const std::string& Animate::getFrameInfoString() const {
 	return m_frameInfo;
 }
 
-void Animate::renderToFrames(size_t totalFrameInterval) {
+void Animate::renderToFrames(size_t totalFrameInterval, float scale) {
 	if (!m_playInfo.ctrlTrackRef)
 		return;
+
+	sf::Transform transform;
+	transform.scale(scale, scale);
 
 	sf::Vector2f min, max;
 	min.x = INFINITY;
@@ -276,9 +279,9 @@ void Animate::renderToFrames(size_t totalFrameInterval) {
 		m_playInfo.timePoint = t;
 		update(0.0f);
 		for (size_t i = 0, n = m_playInfo.trackCount; i < n; ++i) {
-			if (m_playInfo.fragments[i].isEmpty) continue;
+			if (m_playInfo.fragments[i].isEmpty || m_playInfo.fragments[i].disabled) continue;
 			for (int k = 0; k < 4; ++k) {
-				auto& vp = m_playInfo.fragments[i].vertex[k].position;
+				auto vp = transform.transformPoint(m_playInfo.fragments[i].vertex[k].position);
 				if (min.x > vp.x) {
 					min.x = vp.x;
 				}
@@ -296,13 +299,13 @@ void Animate::renderToFrames(size_t totalFrameInterval) {
 	}
 
 	sf::RenderTexture rtex;
-	unsigned int width = (int)(std::ceilf(max.x - min.x) + 0.5f) + 200;
-	unsigned int height = (int)(std::ceilf(max.y - min.y) + 0.5f) + 200;
+	unsigned int width = (int)(std::ceilf(max.x - min.x) + 0.5f + scale * 10);
+	unsigned int height = (int)(std::ceilf(max.y - min.y) + 0.5f + scale * 10);
 	rtex.create(width, height);
 
-	sf::Transform transform;
-	transform.translate(-min.x + 100, -min.y + 100);
-
+	transform = transform.Identity;
+	transform.translate(-min.x + scale * 5, -min.y + scale * 5.0f);
+	transform.scale(scale, scale);
 	sf::RenderStates states;
 	states.transform = transform;
 
@@ -319,7 +322,7 @@ void Animate::renderToFrames(size_t totalFrameInterval) {
 
 		rtex.clear(sf::Color::Transparent);
 		for (size_t i = 0, n = m_playInfo.trackCount; i < n; ++i) {
-			if (m_playInfo.fragments[i].isEmpty) continue;
+			if (m_playInfo.fragments[i].isEmpty || m_playInfo.fragments[i].disabled) continue;
 			va.clear();
 			va.append(m_playInfo.fragments[i].vertex[0]);
 			va.append(m_playInfo.fragments[i].vertex[1]);
@@ -336,6 +339,21 @@ void Animate::renderToFrames(size_t totalFrameInterval) {
 	return;
 }
 
+void Animate::setFragmentDisabled(const std::string& name, bool disabled) {
+	if (!m_dataRef.m_available)
+		return;
+
+	auto it = m_dataRef.m_trackNameTable.find(name);
+
+	if (it == m_dataRef.m_trackNameTable.end()) {
+		printf_s("Animaiton: No track: \'%s\'.\n\n", name.c_str());
+		return;
+	}
+
+	m_playInfo.fragments[it->second].disabled = disabled;
+
+}
+
 void Animate::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	if (!m_playInfo.ctrlTrackRef)
 		return;
@@ -344,7 +362,7 @@ void Animate::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	va.setPrimitiveType(sf::Quads);
 
 	for (size_t i = 0, n = m_playInfo.trackCount; i < n; ++i) {
-		if (m_playInfo.fragments[i].isEmpty) continue;
+		if (m_playInfo.fragments[i].isEmpty || m_playInfo.fragments[i].disabled) continue;
 		va.clear();
 		va.append(m_playInfo.fragments[i].vertex[0]);
 		va.append(m_playInfo.fragments[i].vertex[1]);

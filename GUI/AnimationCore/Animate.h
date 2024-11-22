@@ -60,7 +60,9 @@ public:
 
 	const std::string& getFrameInfoString() const;
 
-	void renderToFrames(size_t totalFrameInterval); // Frame Count = Frame Interval + 1;
+	void renderToFrames(size_t totalFrameInterval, float scale = 1.0f); // Frame Count = Frame Interval + 1;
+
+	void setFragmentDisabled(const std::string& name, bool disabled);
 
 protected:
 
@@ -84,6 +86,10 @@ protected:
 		 * @brief 是否为空
 		*/
 		bool isEmpty = false;
+		/**
+		 * @brief 是否不显示
+		 */
+		bool disabled = false;
 	}; // struct TrackFragData
 
 	struct PlayInfo {

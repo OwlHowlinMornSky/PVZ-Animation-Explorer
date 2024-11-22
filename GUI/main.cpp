@@ -77,12 +77,13 @@ int main() {
 	//testdata.load("assets/Cabbagepult.reanim");
 	//testdata.load("assets/Blover.reanim");
 	//testdata.load("assets/CrazyDave.reanim");
-	//testdata.load("assets/Sunflower.reanim");
-	testdata.load("assets/Chomper.reanim");
+	testdata.load("assets/Sunflower.reanim");
+	//testdata.load("assets/Chomper.reanim");
 	//testdata.load("assets/PeaShooter.reanim");
 
-	//testdata.listTrack();
 	testdata.listControlTrack();
+	//printf_s("LIST:\n\n");
+	//testdata.listTrack();
 
 	test = testdata.create(true);
 	//if (!test->setAnimation("anim_eat")) {
@@ -101,7 +102,21 @@ int main() {
 		return 0;
 	}
 
-	test->renderToFrames(60);
+	/*test->setFragmentDisabled("Zombie_flaghand", true);
+	test->setFragmentDisabled("Zombie_innerarm_screendoor", true);
+
+	test->setFragmentDisabled("Zombie_duckytube", true);
+	test->setFragmentDisabled("Zombie_whitewater", true);
+
+	test->setFragmentDisabled("Zombie_mustache", true);
+	test->setFragmentDisabled("anim_screendoor", true);
+
+	test->setFragmentDisabled("Zombie_whitewater2", true);
+	test->setFragmentDisabled("anim_bucket", true);
+	test->setFragmentDisabled("anim_cone", true);*/
+	//test->setFragmentDisabled("anim_hair", true);
+
+	test->renderToFrames(60, 3.0f);
 	return 0;
 
 	initialize_window();
