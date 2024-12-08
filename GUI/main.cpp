@@ -1,14 +1,14 @@
 ﻿/**
 *              PVZ Animation Explorer
-* 
+*
 *    Copyright (c) 2023-2024  Tyler Parret True
 *
 * @section LICENSE
-* 
+*
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
 *
-* 
+*
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published
 *    by the Free Software Foundation, either version 3 of the License, or
@@ -71,19 +71,40 @@ int main() {
 	update_textTimeScale();
 
 	ohms::pvzanim::AnimData testdata;
-	//testdata.load("assets/Zombie.reanim");
+	testdata.load("assets/Zombie.reanim");
 	//testdata.load("assets/Zombie_polevaulter.reanim");
+	//testdata.load("assets/Zombie_bungi.reanim");
 	//testdata.load("assets/Zombie_pogo.reanim");
+	//testdata.load("assets/Zombie_balloon.reanim");
+	//testdata.load("assets/Zombie_gargantuar.reanim");
 	//testdata.load("assets/Cabbagepult.reanim");
 	//testdata.load("assets/Blover.reanim");
 	//testdata.load("assets/CrazyDave.reanim");
-	testdata.load("assets/Sunflower.reanim");
+	//testdata.load("assets/Sunflower.reanim");
 	//testdata.load("assets/Chomper.reanim");
 	//testdata.load("assets/PeaShooter.reanim");
+	//testdata.load("assets/CherryBomb.reanim");
+	//testdata.load("assets/DoomShroom.reanim");
+	//testdata.load("assets/FirePea.reanim");
+	//testdata.load("assets/SelectorScreen.reanim");
+	//testdata.load("assets/Sun.reanim");
+	//testdata.load("assets/PotatoMine.reanim");
+	//testdata.load("assets/Squash.reanim");
+	//testdata.load("assets/SunShroom.reanim");
+	//testdata.load("assets/Wallnut.reanim");
+	//testdata.load("assets/Tallnut.reanim");
+	//testdata.load("assets/Z.reanim");
+	//testdata.load("assets/Hammer.reanim");
+	//testdata.load("assets/ZenGarden_phonograph.reanim");
+	//testdata.load("assets/ZenGarden_wateringcan.reanim");
+	//testdata.load("assets/Zombie_disco.reanim");
+	//testdata.load("assets/Zombie_jackson.reanim");
+	//testdata.load("assets/Zombie_jackbox.reanim");
+	//testdata.load("assets/Zombie_snorkle.reanim");
 
 	testdata.listControlTrack();
-	//printf_s("LIST:\n\n");
-	//testdata.listTrack();
+	printf_s("LIST:\n\n");
+	testdata.listTrack();
 
 	test = testdata.create(true);
 	//if (!test->setAnimation("anim_eat")) {
@@ -93,6 +114,11 @@ int main() {
 	//if (!test->setAnimation("anim_shooting")) {
 	//if (!test->setAnimation("anim_loop")) {
 	if (!test->setAnimation("anim_idle")) {
+	//if (!test->setAnimation("anim_walk")) {
+	//if (!test->setAnimation("anim_smash")) {
+	//if (!test->setAnimation("anim_armed")) {
+	//if (!test->setAnimation("anim_explode")) {
+	//if (!test->setAnimation("anim_sleep")) {
 	//if (!test->setAnimation("anim_full_idle")) {
 	//if (!test->setAnimation("anim_head_idle")) {
 	//if (!test->setAnimation("anim_idle_handing")) {
@@ -102,22 +128,39 @@ int main() {
 		return 0;
 	}
 
-	/*test->setFragmentDisabled("Zombie_flaghand", true);
-	test->setFragmentDisabled("Zombie_innerarm_screendoor", true);
+	// Normal
+	{
+		test->setFragmentDisabled("Zombie_mustache", true);
+		//test->setFragmentDisabled("anim_tongue", true);
+		//test->setFragmentDisabled("anim_hair", true);
+
+		test->setFragmentDisabled("anim_bucket", true);
+		test->setFragmentDisabled("anim_cone", true);
+	}
+	// Screen Door
+	{
+		// On
+		test->setFragmentDisabled("anim_screendoor", true);
+		test->setFragmentDisabled("Zombie_innerarm_screendoor", true);
+		test->setFragmentDisabled("Zombie_innerarm_screendoor_hand", true);
+		test->setFragmentDisabled("Zombie_outerarm_screendoor", true);
+
+		// Off
+		/*test->setFragmentDisabled("anim_innerarm1", true);
+		test->setFragmentDisabled("anim_innerarm2", true);
+		test->setFragmentDisabled("anim_innerarm3", true);
+		test->setFragmentDisabled("Zombie_outerarm_lower", true);
+		test->setFragmentDisabled("Zombie_outerarm_upper", true);
+		test->setFragmentDisabled("Zombie_outerarm_hand", true);*/
+	}
+	test->setFragmentDisabled("Zombie_flaghand", true);
 
 	test->setFragmentDisabled("Zombie_duckytube", true);
 	test->setFragmentDisabled("Zombie_whitewater", true);
-
-	test->setFragmentDisabled("Zombie_mustache", true);
-	test->setFragmentDisabled("anim_screendoor", true);
-
 	test->setFragmentDisabled("Zombie_whitewater2", true);
-	test->setFragmentDisabled("anim_bucket", true);
-	test->setFragmentDisabled("anim_cone", true);*/
-	//test->setFragmentDisabled("anim_hair", true);
 
-	test->renderToFrames(60, 3.0f);
-	return 0;
+	//test->renderToFrames(60, 3.0f);
+	//return 0;
 
 	initialize_window();
 
@@ -173,7 +216,8 @@ void myIdle() {
 			default:;
 			}
 			break;
-		case sf::Event::MouseWheelScrolled: {
+		case sf::Event::MouseWheelScrolled:
+		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
 				sf::Vector2f mPos((float)evt.mouseWheelScroll.x, (float)evt.mouseWheelScroll.y);
 				mPos = animTrans.getInverse().transformPoint(mPos);
@@ -216,7 +260,8 @@ void myIdle() {
 				l_pressing = false;
 			}
 			break;
-		case sf::Event::MouseMoved: {
+		case sf::Event::MouseMoved:
+		{
 			sf::Vector2f mPos((float)evt.mouseMove.x, (float)evt.mouseMove.y);
 			sf::Transform IV = animTrans.getInverse();
 			sf::Vector2f truePos(IV.transformPoint(mPos));
@@ -342,7 +387,7 @@ void initialize_font_text() {
 	textPos.setPosition(14.0f, 104.0f);
 	textPos.setOutlineColor(sf::Color::Black);
 	textPos.setOutlineThickness(2.0f);
-	
+
 	return;
 }
 
@@ -360,9 +405,9 @@ void initialize_window() {
 		throw std::exception();
 	}
 	HWND hWnd0 = CreateWindowW(L"WINDOWS_OHMS_CLASS_PVZANIMATION", L"PVZ Animation",
-							   WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-							   CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,
-							   0, 0, hInst, 0);
+		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+		CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,
+		0, 0, hInst, 0);
 	if (!hWnd0) {
 		MessageBoxW(NULL, L"Create Window: Failed!", L"Error", MB_ICONERROR);
 		throw std::exception();
