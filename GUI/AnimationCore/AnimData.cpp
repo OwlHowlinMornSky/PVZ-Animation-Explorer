@@ -43,7 +43,7 @@ void AnimData::clear() {
 	return;
 }
 
-bool AnimData::load(const std::string& filepath) {
+bool AnimData::load(const std::filesystem::path& filepath) {
 	clear();
 
 	char linet[1024] = { 0 };
@@ -53,7 +53,7 @@ bool AnimData::load(const std::string& filepath) {
 	bool l_hasReadFPS = false;
 
 	FILE* fp;
-	fopen_s(&fp, filepath.c_str(), "r");
+	fopen_s(&fp, filepath.string().c_str(), "r");
 
 	if (fp == 0) {
 		clear();
@@ -126,14 +126,13 @@ bool AnimData::load(const std::string& filepath) {
 
 	m_frameCount = m_trackArray[0]->m_frameArray.size();
 
-	size_t pathFlag = filepath.find_last_of("\\/");
-	if (pathFlag == std::string::npos) {
-		m_parentPath.clear();
-		m_fileName = filepath;
+	if (filepath.has_filename()) {
+		m_parentPath = filepath.parent_path();
+		m_fileName = filepath.filename();
 	}
 	else {
-		m_parentPath = filepath.substr(0, pathFlag + 1);
-		m_fileName = filepath.substr(pathFlag + 1);
+		m_parentPath.clear();
+		m_fileName = filepath;
 	}
 
 	m_available = true;
@@ -148,7 +147,7 @@ Animate* AnimData::create(bool linearFI) {
 }
 
 void AnimData::listTrack() const {
-	printf_s("File \'%s\' at \'%s\':\n", m_fileName.c_str(), m_parentPath.c_str());
+	printf_s("File \'%S\' at \'%S\':\n", m_fileName.c_str(), m_parentPath.c_str());
 	for (size_t i = 0, n = m_trackArray.size(); i < n; ++i) {
 		printf_s("%02zd: %s,\n", i, m_trackArray[i]->m_name.c_str());
 	}
@@ -160,7 +159,7 @@ void AnimData::listTrack() const {
 }
 
 void AnimData::listControlTrack() const {
-	printf_s("File \'%s\' at \'%s\':\n", m_fileName.c_str(), m_parentPath.c_str());
+	printf_s("File \'%S\' at \'%S\':\n", m_fileName.c_str(), m_parentPath.c_str());
 	size_t i = 0;
 	for (AnimTrack* ii : m_trackArray) {
 		if (ii->m_name.find("anim_") != std::string::npos) {

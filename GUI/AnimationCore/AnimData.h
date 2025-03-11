@@ -28,6 +28,7 @@
 #include "AnimTrack.h"
 
 #include <map>
+#include <filesystem>
 
 namespace ohms {
 namespace pvzanim {
@@ -51,7 +52,7 @@ public:
 
 	void clear();
 
-	bool load(const std::string& filepath);
+	bool load(const std::filesystem::path& filepath);
 
 	Animate* create(bool linearFI = true);
 
@@ -83,8 +84,8 @@ protected:
 	*/
 	std::map<std::string, size_t> m_trackNameTable;
 
-	std::string m_parentPath;
-	std::string m_fileName;
+	std::filesystem::path m_parentPath;
+	std::filesystem::path m_fileName;
 
 }; // class AnimData
 

@@ -85,7 +85,7 @@ bool Animate::setAnimation(const std::string& name) {
 
 			ii.isEmpty = tf.isEmpty;
 			if (tf.imName != "NULL") {
-				ii.texture.loadFromFile(m_dataRef.m_parentPath + tf.imName + ".png");
+				ii.texture.loadFromFile((m_dataRef.m_parentPath / (tf.imName + ".png")).string());
 				ii.texture.setSmooth(true);
 				ii.texture.generateMipmap();
 				ii.texSize = ii.texture.getSize();
@@ -163,7 +163,7 @@ void Animate::update(float dt) {
 					m_dataRef.m_trackArray[i]->getFrame(m_playInfo.trackOffset + j % m_playInfo.trackLength);
 
 				if (tf.imName != "NULL") {
-					ii.texture.loadFromFile(m_dataRef.m_parentPath + tf.imName + ".png");
+					ii.texture.loadFromFile((m_dataRef.m_parentPath / (tf.imName + ".png")).string());
 					ii.texture.setSmooth(true);
 					ii.texture.generateMipmap();
 					ii.texSize = ii.texture.getSize();

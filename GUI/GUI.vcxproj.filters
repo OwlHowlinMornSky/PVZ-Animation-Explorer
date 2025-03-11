@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationCore\Animate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -33,11 +30,12 @@
     <ClCompile Include="AnimationCore\Exporter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Win32OHMS.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationCore\Animate.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -56,5 +54,16 @@
     <ClInclude Include="AnimationCore\XmlTag.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MainWindow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GUI.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
