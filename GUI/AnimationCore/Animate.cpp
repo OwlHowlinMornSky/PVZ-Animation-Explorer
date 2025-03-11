@@ -1,13 +1,13 @@
-/**
+﻿/**
 * @file    Animate.cpp
 * @author  Tyler Parret True (OwlHowlinMornSky) <mysteryworldgod@outlook.com>
 *
 * @section LICENSE
 *
+*    Copyright (c) 2023-2025  Tyler Parret True
+*
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
-*
-*    Copyright (c) 2023  Tyler Parret True
 *
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published

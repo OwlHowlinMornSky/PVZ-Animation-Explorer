@@ -1,13 +1,13 @@
-/**
+ï»¿/**
 * @file    Animate.h
 * @author  Tyler Parret True (OwlHowlinMornSky) <mysteryworldgod@outlook.com>
 *
 * @section LICENSE
 *
+*    Copyright (c) 2023-2025  Tyler Parret True
+*
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
-*
-*    Copyright (c) 2023  Tyler Parret True
 * 
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published
@@ -71,23 +71,23 @@ protected:
 protected:
 	struct TrackFragData {
 		/**
-		 * @brief ÎÆÀí£¬updateFrame Ê±¸üĞÂ
+		 * @brief çº¹ç†ï¼ŒupdateFrame æ—¶æ›´æ–°
 		*/
 		sf::Texture texture;
 		/**
-		 * @brief ÎÆÀí´óĞ¡£¬Ëæ texture ¸üĞÂ
+		 * @brief çº¹ç†å¤§å°ï¼Œéš texture æ›´æ–°
 		*/
 		sf::Vector2u texSize;
 		/**
-		 * @brief ËÄ¸ö¶¥µã
+		 * @brief å››ä¸ªé¡¶ç‚¹
 		*/
 		sf::Vertex vertex[4];
 		/**
-		 * @brief ÊÇ·ñÎª¿Õ
+		 * @brief æ˜¯å¦ä¸ºç©º
 		*/
 		bool isEmpty = false;
 		/**
-		 * @brief ÊÇ·ñ²»ÏÔÊ¾
+		 * @brief æ˜¯å¦ä¸æ˜¾ç¤º
 		 */
 		bool disabled = false;
 	}; // struct TrackFragData

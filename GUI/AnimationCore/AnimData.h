@@ -1,13 +1,13 @@
-/**
+ï»¿/**
 * @file    AnimData.h
 * @author  Tyler Parret True (OwlHowlinMornSky) <mysteryworldgod@outlook.com>
 *
 * @section LICENSE
 *
+*    Copyright (c) 2023-2025  Tyler Parret True
+*
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
-*
-*    Copyright (c) 2023  Tyler Parret True
 * 
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published
@@ -64,22 +64,22 @@ protected:
 	bool m_available;
 
 	/**
-	 * @brief ¶¯»­ Ã¿ÃëÖ¡Êı
+	 * @brief åŠ¨ç”» æ¯ç§’å¸§æ•°
 	*/
 	int m_fps;
 
 	/**
-	 * @brief ¶¯»­ ×ÜÖ¡Êı
+	 * @brief åŠ¨ç”» æ€»å¸§æ•°
 	*/
 	size_t m_frameCount;
 	
 	/**
-	 * @brief ¹ìµÀÖ¸Õë ĞòÁĞ
+	 * @brief è½¨é“æŒ‡é’ˆ åºåˆ—
 	*/
 	std::vector<AnimTrack*> m_trackArray;
 	
 	/**
-	 * @brief ¹ìµÀÃû³Æ µ½ ¹ìµÀÖ¸Õë µÄ Ó³Éä
+	 * @brief è½¨é“åç§° åˆ° è½¨é“æŒ‡é’ˆ çš„ æ˜ å°„
 	*/
 	std::map<std::string, size_t> m_trackNameTable;
 

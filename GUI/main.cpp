@@ -1,13 +1,10 @@
 ﻿/**
-*              PVZ Animation Explorer
-*
-*    Copyright (c) 2023-2024  Tyler Parret True
-*
 * @section LICENSE
+*
+*    Copyright (c) 2023-2025  Tyler Parret True
 *
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
-*
 *
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published

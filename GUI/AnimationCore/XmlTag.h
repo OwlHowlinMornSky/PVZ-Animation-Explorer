@@ -1,13 +1,13 @@
-/**
+ï»¿/**
 * @file    XmlTag.h
 * @author  Tyler Parret True (OwlHowlinMornSky) <mysteryworldgod@outlook.com>
 *
 * @section LICENSE
 *
+*    Copyright (c) 2023-2025  Tyler Parret True
+*
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
-*
-*    Copyright (c) 2023  Tyler Parret True
 * 
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published
@@ -31,8 +31,8 @@
 namespace ohms {
 
 /**
- * @brief XML ±êÇ©¶ÁÈ¡¡£¿ÉÒÔÓÃÀ´ »ñÈ¡±êÇ©ÀàĞÍ£¬¹¦ÄÜºÜÉÙ£¬Õë¶ÔµÄ ¾ÍÊÇÕâ¸öÏîÄ¿¡£
- * ²»Òª ÓÃÔÚÆäËûµØ·½£¬ÕæÕı ¶ÁÈ¡ XML µÄ¿ªÔ´¿â ºÜ¶à¡£
+ * @brief XML æ ‡ç­¾è¯»å–ã€‚å¯ä»¥ç”¨æ¥ è·å–æ ‡ç­¾ç±»å‹ï¼ŒåŠŸèƒ½å¾ˆå°‘ï¼Œé’ˆå¯¹çš„ å°±æ˜¯è¿™ä¸ªé¡¹ç›®ã€‚
+ * ä¸è¦ ç”¨åœ¨å…¶ä»–åœ°æ–¹ï¼ŒçœŸæ­£ è¯»å– XML çš„å¼€æºåº“ å¾ˆå¤šã€‚
 */
 class XmlTag {
 public:
@@ -48,22 +48,22 @@ public:
 	}
 
 	/**
-	 * @brief ¶ÁÈ¡ XML ±êÇ©£¬´Ó ¸ø¶¨µÄÎ»ÖÃ ¶ÁÆğ¡£Ã»ÓĞ¿¼ÂÇ ¿Õ¸ñ ºÍ ÆäËû·ûºÅ£¬±ØĞë±£Ö¤ Ã»ÓĞ¿Õ¸ñ¡£
-	 * @param str ×Ö·û´®¡£
-	 * @param off Æ«ÒÆ¡£
-	 * @return ³É¹¦¶ÁÈ¡ Ôò ·µ»Ø ±êÇ©½áÊøºóµÄ µÚÒ»¸ö×Ö·ûµÄ Î»ÖÃ£¬³ö´í Ôò ·µ»Ø 0¡£
+	 * @brief è¯»å– XML æ ‡ç­¾ï¼Œä» ç»™å®šçš„ä½ç½® è¯»èµ·ã€‚æ²¡æœ‰è€ƒè™‘ ç©ºæ ¼ å’Œ å…¶ä»–ç¬¦å·ï¼Œå¿…é¡»ä¿è¯ æ²¡æœ‰ç©ºæ ¼ã€‚
+	 * @param str å­—ç¬¦ä¸²ã€‚
+	 * @param off åç§»ã€‚
+	 * @return æˆåŠŸè¯»å– åˆ™ è¿”å› æ ‡ç­¾ç»“æŸåçš„ ç¬¬ä¸€ä¸ªå­—ç¬¦çš„ ä½ç½®ï¼Œå‡ºé”™ åˆ™ è¿”å› 0ã€‚
 	*/
 	size_t read(const std::string& str, size_t off) {
 		clear();
 
-		// ²»ºÏÒªÇó Ö±½Ó·µ»Ø
+		// ä¸åˆè¦æ±‚ ç›´æ¥è¿”å›
 		if (off >= str.length()) 
 			return 0;
 		if (str[off] != '<')
 			return 0;
 
 		++off;
-		// ¶Áµ½ ½áÊø±ê¼Ç£¨ÎÒ²»È·¶¨ Óï·¨°ü²»°üÀ¨ ·´Ğ±Ïß£©
+		// è¯»åˆ° ç»“æŸæ ‡è®°ï¼ˆæˆ‘ä¸ç¡®å®š è¯­æ³•åŒ…ä¸åŒ…æ‹¬ åæ–œçº¿ï¼‰
 		if (str[off] == '/') {
 			m_isStart = 0;
 			++off;
@@ -71,27 +71,27 @@ public:
 
 		size_t off_s = off, off_e;
 
-		// ÕÒµ½ ±êÇ©½áÊøµã
+		// æ‰¾åˆ° æ ‡ç­¾ç»“æŸç‚¹
 		off_e = str.find_first_of('>', off_s);
 		if (off > str.length())
 			return 0;
 
-		// È¡³öÀàĞÍ
+		// å–å‡ºç±»å‹
 		m_type = str.substr(off_s, off_e - off_s);
 		return off_e + 1;
 	}
 
 	/**
-	 * @brief »ñÈ¡ ±êÇ©ÀàĞÍ£¨»òÕßÊÇ Ãû×Ö£¬ÎÒ¼Ç²»ÇåÁË£©¡£
-	 * @return ÀàĞÍ¡£×Ö·û´®¡£
+	 * @brief è·å– æ ‡ç­¾ç±»å‹ï¼ˆæˆ–è€…æ˜¯ åå­—ï¼Œæˆ‘è®°ä¸æ¸…äº†ï¼‰ã€‚
+	 * @return ç±»å‹ã€‚å­—ç¬¦ä¸²ã€‚
 	*/
 	const std::string& getType() const {
 		return m_type;
 	}
 
 	/**
-	 * @brief ÊÇ·ñÊÇ ¿ªÍ·µÄ±êÇ©¡£Ò²¾ÍÊÇ Ã»ÓĞĞ±Ïß¡£
-	 * @return ÄãÖªµÀÊÇÉ¶¡£
+	 * @brief æ˜¯å¦æ˜¯ å¼€å¤´çš„æ ‡ç­¾ã€‚ä¹Ÿå°±æ˜¯ æ²¡æœ‰æ–œçº¿ã€‚
+	 * @return ä½ çŸ¥é“æ˜¯å•¥ã€‚
 	*/
 	bool isStart() const {
 		return m_isStart;
@@ -100,12 +100,12 @@ public:
 protected:
 
 	/**
-	 * @brief XML ¶ÔÏóÀàĞÍ£¨»òÕßÊÇ Ãû×Ö£¬ÎÒ¼Ç²»ÇåÁË£©¡£
+	 * @brief XML å¯¹è±¡ç±»å‹ï¼ˆæˆ–è€…æ˜¯ åå­—ï¼Œæˆ‘è®°ä¸æ¸…äº†ï¼‰ã€‚
 	*/
 	std::string m_type;
 
 	/**
-	 * @brief XML ±êÇ© ²»ÊÇ½áÊø±ê¼Ç¡£
+	 * @brief XML æ ‡ç­¾ ä¸æ˜¯ç»“æŸæ ‡è®°ã€‚
 	*/
 	bool m_isStart;
 

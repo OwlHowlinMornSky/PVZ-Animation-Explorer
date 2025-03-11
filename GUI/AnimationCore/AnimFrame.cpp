@@ -1,13 +1,13 @@
-/**
+ï»¿/**
 * @file    AnimFrame.cpp
 * @author  Tyler Parret True (OwlHowlinMornSky) <mysteryworldgod@outlook.com>
 *
 * @section LICENSE
 *
+*    Copyright (c) 2023-2025  Tyler Parret True
+*
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
-*
-*    Copyright (c) 2023  Tyler Parret True
 * 
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published
@@ -37,12 +37,12 @@ bool AnimFrame::readFrame(const std::string& line) {
 	size_t flag = 0;
 	uint16_t l_loaded = 0;
 
-	// È¡¿ªÍ·
+	// å–å¼€å¤´
 	off = tag.read(line, off);
 	if (off == 0 || !tag.isStart() || tag.getType() != "t")
 		return false;
 
-	// Ñ­»·¶ÁÈ¡ÖĞ¼äµÄÖµ
+	// å¾ªç¯è¯»å–ä¸­é—´çš„å€¼
 	bool keepGoingOn = true;
 	while (keepGoingOn) {
 		off = tag.read(line, off);
@@ -53,11 +53,11 @@ bool AnimFrame::readFrame(const std::string& line) {
 		if ((!tag.isStart() && tag.getType() == "t") && off != n)
 			return false;
 
-		// Ò»ĞĞ½áÊø ÇÒ µ½</t> Ôò ÍË³ö
+		// ä¸€è¡Œç»“æŸ ä¸” åˆ°</t> åˆ™ é€€å‡º
 		if (off == n && (!tag.isStart() && tag.getType() == "t"))
 			break;
 
-		// ·ÖÀà¶ÁÈ¡
+		// åˆ†ç±»è¯»å–
 		if (tag.isStart()) {
 			if (tag.getType() == "f") {
 				if (l_loaded & (1 << 0)) return false;

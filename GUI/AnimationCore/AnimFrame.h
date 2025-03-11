@@ -1,13 +1,13 @@
-/**
+ï»¿/**
 * @file    AnimFrame.h
 * @author  Tyler Parret True (OwlHowlinMornSky) <mysteryworldgod@outlook.com>
 *
 * @section LICENSE
 *
+*    Copyright (c) 2023-2025  Tyler Parret True
+*
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
-*
-*    Copyright (c) 2023  Tyler Parret True
 * 
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published
@@ -32,43 +32,43 @@ namespace ohms {
 namespace pvzanim {
 
 /**
- * @brief Ö¡Êı¾İµÄ½á¹¹Ìå¡£
+ * @brief å¸§æ•°æ®çš„ç»“æ„ä½“ã€‚
 */
 struct FrameData {
 	/**
-	 * @brief ÊÇ·ñÎª¿Õ°×Ö¡¡£
+	 * @brief æ˜¯å¦ä¸ºç©ºç™½å¸§ã€‚
 	*/
 	bool isEmpty;
 	/**
-	 * @brief Í¼Ïñ X ×ø±ê¡£
+	 * @brief å›¾åƒ X åæ ‡ã€‚
 	*/
 	float px;
 	/**
-	 * @brief Í¼Ïñ Y ×ø±ê¡£
+	 * @brief å›¾åƒ Y åæ ‡ã€‚
 	*/
 	float py;
 	/**
-	 * @brief X Öá·½ÏòÇãĞ±¶ÈÊı¡£
+	 * @brief X è½´æ–¹å‘å€¾æ–œåº¦æ•°ã€‚
 	*/
 	float kx;
 	/**
-	 * @brief YÖá·½ÏòÇãĞ±¶ÈÊı¡£
+	 * @brief Yè½´æ–¹å‘å€¾æ–œåº¦æ•°ã€‚
 	*/
 	float ky;
 	/**
-	 * @brief X Öá·½ÏòËõ·Å°Ù·Ö±È¡£
+	 * @brief X è½´æ–¹å‘ç¼©æ”¾ç™¾åˆ†æ¯”ã€‚
 	*/
 	float sx;
 	/**
-	 * @brief Y Öá·½ÏòËõ·Å°Ù·Ö±È¡£
+	 * @brief Y è½´æ–¹å‘ç¼©æ”¾ç™¾åˆ†æ¯”ã€‚
 	*/
 	float sy;
 	/**
-	 * @brief IMAGE_REANIM_Í¼ÏñÃû³Æ¡£
+	 * @brief IMAGE_REANIM_å›¾åƒåç§°ã€‚
 	*/
 	std::string imName;
 	/**
-	 * @brief Alpha °Ù·Ö±È¡£
+	 * @brief Alpha ç™¾åˆ†æ¯”ã€‚
 	*/
 	float a;
 
@@ -97,7 +97,7 @@ struct FrameData {
 };
 
 /**
- * @brief ¶¯»­Ò»Ö¡¡£
+ * @brief åŠ¨ç”»ä¸€å¸§ã€‚
 */
 class AnimFrame final {
 	friend class AnimTrack;
@@ -114,14 +114,14 @@ public:
 	}
 
 	/**
-	 * @brief ¶ÁÈ¡ Ò»Ö¡µÄÊı¾İ¡£
-	 * @param line Ò»Ö¡¾ÍÊÇÒ»ĞĞ¡£
-	 * @return ¶ÁÈ¡ÊÇ·ñ³É¹¦¡£
+	 * @brief è¯»å– ä¸€å¸§çš„æ•°æ®ã€‚
+	 * @param line ä¸€å¸§å°±æ˜¯ä¸€è¡Œã€‚
+	 * @return è¯»å–æ˜¯å¦æˆåŠŸã€‚
 	*/
 	bool readFrame(const std::string& line);
 
 	/**
-	 * @brief È¡ ÕâÒ»Ö¡µÄ Êı¾İ¡£
+	 * @brief å– è¿™ä¸€å¸§çš„ æ•°æ®ã€‚
 	 * @return 
 	*/
 	const FrameData& getData() const {
