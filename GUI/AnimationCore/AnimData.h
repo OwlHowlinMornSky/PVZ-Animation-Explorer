@@ -40,15 +40,9 @@ class AnimData final {
 	friend class Exporter;
 
 public:
-	AnimData() :
-		m_available(false),
-		m_fps(12),
-		m_frameCount(0)
-	{}
+	AnimData();
 
-	~AnimData() {
-		clear();
-	}
+	~AnimData();
 
 	void clear();
 

@@ -8,7 +8,7 @@
 *
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
-* 
+*
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published
 *    by the Free Software Foundation, either version 3 of the License, or
@@ -27,6 +27,12 @@
 
 namespace ohms {
 namespace pvzanim {
+
+AnimTrack::AnimTrack() {}
+
+AnimTrack::~AnimTrack() {
+	clear();
+}
 
 void AnimTrack::clear() {
 	for (AnimFrame* i : m_frameArray) {
@@ -108,8 +114,15 @@ bool AnimTrack::readTrack(FILE*& fp) {
 		clear();
 		return false;
 	}
-	
-    return true;
+
+	return true;
+}
+
+const FrameData& AnimTrack::getFrame(size_t n) {
+	if (n >= m_frameArray.size()) {
+		throw std::exception();
+	}
+	return m_frameArray[n]->getData();
 }
 
 } // namespace pvzanim

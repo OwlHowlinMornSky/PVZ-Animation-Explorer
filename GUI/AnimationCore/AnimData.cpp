@@ -31,6 +31,15 @@
 namespace ohms {
 namespace pvzanim {
 
+AnimData::AnimData() :
+	m_available(false),
+	m_fps(12),
+	m_frameCount(0) {}
+
+AnimData::~AnimData() {
+	clear();
+}
+
 void AnimData::clear() {
 	for (AnimTrack* i : m_trackArray) {
 		delete i;

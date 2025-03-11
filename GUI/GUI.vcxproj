@@ -148,6 +148,7 @@
     <ClCompile Include="AnimationCore\AnimFrame.cpp" />
     <ClCompile Include="AnimationCore\AnimTrack.cpp" />
     <ClCompile Include="AnimationCore\Exporter.cpp" />
+    <ClCompile Include="AnimationCore\XmlTag.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>

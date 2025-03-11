@@ -1,5 +1,5 @@
 ﻿/**
-* @file    AnimTrack.h
+* @file    XmlTag.h
 * @author  Tyler Parret True (OwlHowlinMornSky) <mysteryworldgod@outlook.com>
 *
 * @section LICENSE
@@ -8,7 +8,7 @@
 *
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
-* 
+*
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published
 *    by the Free Software Foundation, either version 3 of the License, or
@@ -23,48 +23,50 @@
 *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 *
 */
+#include "XmlTag.h"
 
-#pragma once
+ohms::XmlTag::XmlTag() :
+	m_type("NULL"),
+	m_isStart(true) {}
 
-#include "AnimFrame.h"
+void ohms::XmlTag::clear() {
+	m_type = "NULL";
+	m_isStart = true;
+	return;
+}
 
-#include <vector>
+size_t ohms::XmlTag::read(const std::string& str, size_t off) {
+	clear();
 
-namespace ohms {
-namespace pvzanim {
+	// 不合要求 直接返回
+	if (off >= str.length())
+		return 0;
+	if (str[off] != '<')
+		return 0;
 
-class AnimTrack final {
-	friend class AnimData;
-	friend class Animate;
+	++off;
+	// 读到 结束标记（我不确定 语法包不包括 反斜线）
+	if (str[off] == '/') {
+		m_isStart = 0;
+		++off;
+	}
 
-protected:
-	AnimTrack();
+	size_t off_s = off, off_e;
 
-public:
-	~AnimTrack();
+	// 找到 标签结束点
+	off_e = str.find_first_of('>', off_s);
+	if (off > str.length())
+		return 0;
 
-	void clear();
+	// 取出类型
+	m_type = str.substr(off_s, off_e - off_s);
+	return off_e + 1;
+}
 
-	/**
-	 * @brief 读取轨道
-	 * @return 帧数量
-	*/
-	bool readTrack(FILE*& fp);
+const std::string& ohms::XmlTag::getType() const {
+	return m_type;
+}
 
-	const FrameData& getFrame(size_t n);
-
-protected:
-	/**
-	 * @brief 轨道的所有帧
-	*/
-	std::vector<AnimFrame*> m_frameArray;
-
-	/**
-	 * @brief 轨道的名称
-	*/
-	std::string m_name;
-
-}; // class AnimTrack
-
-} // namespace pvzanim
-} // namespace ohms
+bool ohms::XmlTag::isStart() const {
+	return m_isStart;
+}

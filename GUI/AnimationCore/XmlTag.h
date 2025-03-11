@@ -36,16 +36,9 @@ namespace ohms {
 */
 class XmlTag {
 public:
-	XmlTag() :
-		m_type("NULL"),
-		m_isStart(true)
-	{}
+	XmlTag();
 
-	void clear() {
-		m_type = "NULL";
-		m_isStart = true;
-		return;
-	}
+	void clear();
 
 	/**
 	 * @brief 读取 XML 标签，从 给定的位置 读起。没有考虑 空格 和 其他符号，必须保证 没有空格。
@@ -53,54 +46,24 @@ public:
 	 * @param off 偏移。
 	 * @return 成功读取 则 返回 标签结束后的 第一个字符的 位置，出错 则 返回 0。
 	*/
-	size_t read(const std::string& str, size_t off) {
-		clear();
-
-		// 不合要求 直接返回
-		if (off >= str.length()) 
-			return 0;
-		if (str[off] != '<')
-			return 0;
-
-		++off;
-		// 读到 结束标记（我不确定 语法包不包括 反斜线）
-		if (str[off] == '/') {
-			m_isStart = 0;
-			++off;
-		}
-
-		size_t off_s = off, off_e;
-
-		// 找到 标签结束点
-		off_e = str.find_first_of('>', off_s);
-		if (off > str.length())
-			return 0;
-
-		// 取出类型
-		m_type = str.substr(off_s, off_e - off_s);
-		return off_e + 1;
-	}
+	size_t read(const std::string& str, size_t off);
 
 	/**
-	 * @brief 获取 标签类型（或者是 名字，我记不清了）。
+	 * @brief 获取 标签类型（或者是 名字）。
 	 * @return 类型。字符串。
 	*/
-	const std::string& getType() const {
-		return m_type;
-	}
+	const std::string& getType() const;
 
 	/**
 	 * @brief 是否是 开头的标签。也就是 没有斜线。
 	 * @return 你知道是啥。
 	*/
-	bool isStart() const {
-		return m_isStart;
-	}
+	bool isStart() const;
 
 protected:
 
 	/**
-	 * @brief XML 对象类型（或者是 名字，我记不清了）。
+	 * @brief XML 对象类型（或者是 名字）。
 	*/
 	std::string m_type;
 

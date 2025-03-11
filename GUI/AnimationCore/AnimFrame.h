@@ -72,28 +72,9 @@ struct FrameData {
 	*/
 	float a;
 
-	FrameData() :
-		isEmpty(false),
-		px(0.0f),
-		py(0.0f),
-		kx(0.0f),
-		ky(0.0f),
-		sx(1.0f),
-		sy(1.0f),
-		imName("NULL"),
-		a(1.0f)
-	{}
+	FrameData();
 
-	void follow(const FrameData& data) {
-		this->isEmpty = data.isEmpty;
-		this->px = data.px;
-		this->py = data.py;
-		this->kx = data.kx;
-		this->ky = data.ky;
-		this->sx = data.sx;
-		this->sy = data.sy;
-		this->a = data.a;
-	}
+	void follow(const FrameData& data);
 };
 
 /**
@@ -104,14 +85,12 @@ class AnimFrame final {
 	friend class Animate;
 
 protected:
-	AnimFrame() {}
+	AnimFrame();
 
 public:
-	~AnimFrame() {}
+	~AnimFrame();
 
-	void follow(const AnimFrame& lastFrame) {
-		m_data.follow(lastFrame.m_data);
-	}
+	void follow(const AnimFrame& lastFrame);
 
 	/**
 	 * @brief 读取 一帧的数据。
@@ -124,9 +103,8 @@ public:
 	 * @brief 取 这一帧的 数据。
 	 * @return 
 	*/
-	const FrameData& getData() const {
-		return m_data;
-	}
+	const FrameData& getData() const;
+
 protected:
 	FrameData m_data;
 }; // class AnimFrame

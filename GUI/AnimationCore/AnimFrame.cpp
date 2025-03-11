@@ -29,6 +29,14 @@
 namespace ohms {
 namespace pvzanim {
 
+AnimFrame::AnimFrame() {}
+
+AnimFrame::~AnimFrame() {}
+
+void AnimFrame::follow(const AnimFrame& lastFrame) {
+	m_data.follow(lastFrame.m_data);
+}
+
 bool AnimFrame::readFrame(const std::string& line) {
 	std::string tmp;
 	XmlTag tag;
@@ -176,6 +184,32 @@ bool AnimFrame::readFrame(const std::string& line) {
 		else return false;
 	}
 	return true;
+}
+
+const FrameData& AnimFrame::getData() const {
+	return m_data;
+}
+
+FrameData::FrameData() :
+	isEmpty(false),
+	px(0.0f),
+	py(0.0f),
+	kx(0.0f),
+	ky(0.0f),
+	sx(1.0f),
+	sy(1.0f),
+	imName("NULL"),
+	a(1.0f) {}
+
+void FrameData::follow(const FrameData& data) {
+	this->isEmpty = data.isEmpty;
+	this->px = data.px;
+	this->py = data.py;
+	this->kx = data.kx;
+	this->ky = data.ky;
+	this->sx = data.sx;
+	this->sy = data.sy;
+	this->a = data.a;
 }
 
 } // namespace pvzanim

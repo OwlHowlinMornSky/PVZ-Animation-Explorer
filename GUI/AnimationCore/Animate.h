@@ -37,13 +37,7 @@ class Animate final : public sf::Drawable {
 	friend class AnimData;
 
 protected:
-	Animate(const AnimData& data, bool linearFrameInsertion) :
-		m_dataRef(data),
-		m_linearFI(linearFrameInsertion),
-		m_playInfo(data.m_trackArray.size()),
-		m_timeScale(1.0f)
-	{
-	}
+	Animate(const AnimData& data, bool linearFrameInsertion);
 
 public:
 	~Animate() {}
@@ -54,9 +48,7 @@ public:
 
 	void nextFrame(size_t df);
 
-	void setTimeScale(float nv) {
-		m_timeScale = nv;
-	}
+	void setTimeScale(float nv);
 
 	const std::string& getFrameInfoString() const;
 
@@ -101,19 +93,9 @@ protected:
 		size_t lastFramePoint;
 		float timePoint;
 
-		PlayInfo(size_t cnt) :
-			trackCount(cnt),
-			ctrlTrackRef(nullptr),
-			fragments(new TrackFragData[cnt]),
-			trackOffset(0),
-			trackLength(0),
-			lastFramePoint(0),
-			timePoint(0.0f)
-		{}
+		PlayInfo(size_t cnt);
 
-		~PlayInfo() {
-			delete[] fragments;
-		}
+		~PlayInfo();
 	}; // struct PlayInfo
 
 protected:

@@ -29,6 +29,12 @@
 namespace ohms {
 namespace pvzanim {
 
+Animate::Animate(const AnimData& data, bool linearFrameInsertion) :
+	m_dataRef(data),
+	m_linearFI(linearFrameInsertion),
+	m_playInfo(data.m_trackArray.size()),
+	m_timeScale(1.0f) {}
+
 bool Animate::setAnimation(const std::string& name) {
 	if (!m_dataRef.m_available)
 		return false;
@@ -247,6 +253,10 @@ void Animate::update(float dt) {
 	return;
 }
 
+void Animate::setTimeScale(float nv) {
+	m_timeScale = nv;
+}
+
 const std::string& Animate::getFrameInfoString() const {
 	char tmp[64];
 	if (m_linearFI)
@@ -373,6 +383,19 @@ void Animate::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	}
 	return;
 
+}
+
+Animate::PlayInfo::PlayInfo(size_t cnt) :
+	trackCount(cnt),
+	ctrlTrackRef(nullptr),
+	fragments(new TrackFragData[cnt]),
+	trackOffset(0),
+	trackLength(0),
+	lastFramePoint(0),
+	timePoint(0.0f) {}
+
+Animate::PlayInfo::~PlayInfo() {
+	delete[] fragments;
 }
 
 } // namespace pvzanim
