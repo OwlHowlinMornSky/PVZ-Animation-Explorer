@@ -24,6 +24,9 @@ private:
 	void update_view();
 
 	void onOpenClose(bool isOpen, std::wstring_view file);
+	void onClickAnimTrack(size_t offset);
+	void onClickAnimTrackCtrl(size_t offset);
+
 	void myEnterSYSLOOP();
 	void myExitSYSLOOP();
 	void myIdle();

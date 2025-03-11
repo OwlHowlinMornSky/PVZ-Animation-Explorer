@@ -53,6 +53,8 @@ public:
 
 	const FrameData& getFrame(size_t n);
 
+	std::string_view getName() const;
+
 protected:
 	/**
 	 * @brief 轨道的所有帧

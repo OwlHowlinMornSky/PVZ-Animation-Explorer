@@ -43,6 +43,7 @@ public:
 	~Animate() {}
 
 	bool setAnimation(const std::string& name);
+	void stop();
 
 	void update(float dt);
 
@@ -55,6 +56,7 @@ public:
 	void renderToFrames(size_t totalFrameInterval, float scale = 1.0f); // Frame Count = Frame Interval + 1;
 
 	void setFragmentDisabled(const std::string& name, bool disabled);
+	void enableAllFragments();
 
 protected:
 

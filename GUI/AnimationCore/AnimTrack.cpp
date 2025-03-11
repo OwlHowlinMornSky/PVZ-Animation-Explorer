@@ -125,5 +125,9 @@ const FrameData& AnimTrack::getFrame(size_t n) {
 	return m_frameArray[n]->getData();
 }
 
+std::string_view AnimTrack::getName() const {
+    return m_name;
+}
+
 } // namespace pvzanim
 } // namespace ohms

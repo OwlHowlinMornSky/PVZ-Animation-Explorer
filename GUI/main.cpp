@@ -25,7 +25,6 @@
 #include "MainWindow.h"
 
 int main() {
-
 	MainWindow* wnd = new MainWindow();
 	wnd->init();
 	wnd->run();

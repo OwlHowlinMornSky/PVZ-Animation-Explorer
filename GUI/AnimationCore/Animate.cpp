@@ -25,6 +25,8 @@
 */
 
 #include "Animate.h"
+#include <iostream>
+#include <format>
 
 namespace ohms {
 namespace pvzanim {
@@ -48,7 +50,7 @@ bool Animate::setAnimation(const std::string& name) {
 	auto it = m_dataRef.m_trackNameTable.find(name);
 
 	if (it == m_dataRef.m_trackNameTable.end()) {
-		printf_s("Animaiton: Cannot find track: \'%s\'.\n\n", name.c_str());
+		std::cerr << "Animaiton: Cannot find track: \'" << name << "\'.\n\n";
 		return false;
 	}
 
@@ -71,7 +73,7 @@ bool Animate::setAnimation(const std::string& name) {
 
 	while (checkFlag < m_dataRef.m_frameCount) {
 		if (!m_playInfo.ctrlTrackRef->getFrame(checkFlag).isEmpty) {
-			printf_s("Animaiton: This track cannot be used as control track: \'%s\'.\n\n", name.c_str());
+			std::cerr << "Animaiton: This track cannot be used as control track: \'" << name << "\'.\n\n";
 			return false;
 		}
 		++checkFlag;
@@ -140,9 +142,17 @@ bool Animate::setAnimation(const std::string& name) {
 		}
 	}
 
-	printf_s("Animation: Set track: \'%s\'. Length: %zd.\n\n", name.c_str(), m_playInfo.trackLength);
+	std::cerr << "Animation: Set track: \'" << name << "\'. Length: " << m_playInfo.trackLength << ".\n\n";
 
 	return true;
+}
+
+void Animate::stop() {
+	if (m_playInfo.ctrlTrackRef) {
+		m_playInfo.timePoint = 0.0f;
+		update(0.0f);
+		m_playInfo.ctrlTrackRef = nullptr;
+	}
 }
 
 void Animate::update(float dt) {
@@ -186,7 +196,11 @@ void Animate::update(float dt) {
 		const FrameData& thisFrame =
 			m_dataRef.m_trackArray[i]->getFrame(m_playInfo.lastFramePoint + m_playInfo.trackOffset);
 		const FrameData& nextFrame =
-			m_dataRef.m_trackArray[i]->getFrame(m_playInfo.lastFramePoint + m_playInfo.trackOffset + 1);
+			m_dataRef.m_trackArray[i]->getFrame(
+				(m_playInfo.lastFramePoint + m_playInfo.trackOffset < m_dataRef.m_trackArray[i]->m_frameArray.size()) ?
+				m_playInfo.lastFramePoint + m_playInfo.trackOffset + 1 :
+				m_playInfo.trackOffset
+			);
 
 		float lpx, lpy, lkx, lky, lsx, lsy, lap, coskx, sinkx, cosky, sinky;
 
@@ -258,12 +272,10 @@ void Animate::setTimeScale(float nv) {
 }
 
 const std::string& Animate::getFrameInfoString() const {
-	char tmp[64];
 	if (m_linearFI)
-		sprintf_s(tmp, 64, "Frame: %04.1f / %02zd.0", m_playInfo.timePoint * m_dataRef.m_fps, m_playInfo.trackLength);
+		m_frameInfo = std::format("Frame: {:04.1f} / {:02}.0", m_playInfo.timePoint * m_dataRef.m_fps, m_playInfo.trackLength);
 	else
-		sprintf_s(tmp, 64, "Frame: %02zd / %02zd", m_playInfo.lastFramePoint, m_playInfo.trackLength);
-	m_frameInfo.assign(tmp);
+		m_frameInfo = std::format("Frame: {:02} / {:02}", m_playInfo.lastFramePoint, m_playInfo.trackLength);
 	return m_frameInfo;
 }
 
@@ -356,12 +368,17 @@ void Animate::setFragmentDisabled(const std::string& name, bool disabled) {
 	auto it = m_dataRef.m_trackNameTable.find(name);
 
 	if (it == m_dataRef.m_trackNameTable.end()) {
-		printf_s("Animaiton: No track: \'%s\'.\n\n", name.c_str());
+		std::cerr << "Animaiton: No track: \'" << name << "\'.\n\n";
 		return;
 	}
 
 	m_playInfo.fragments[it->second].disabled = disabled;
 
+}
+
+void Animate::enableAllFragments() {
+	for (int i = 0, n = m_playInfo.trackCount; i < n; ++i)
+		m_playInfo.fragments[i].disabled = false;
 }
 
 void Animate::draw(sf::RenderTarget& target, sf::RenderStates states) const {

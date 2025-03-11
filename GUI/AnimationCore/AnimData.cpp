@@ -8,7 +8,7 @@
 *
 *                   GNU AFFERO GENERAL PUBLIC LICENSE
 *                      Version 3, 19 November 2007
-* 
+*
 *    This program is free software: you can redistribute it and/or modify
 *    it under the terms of the GNU Affero General Public License as published
 *    by the Free Software Foundation, either version 3 of the License, or
@@ -27,6 +27,7 @@
 #include "AnimData.h"
 
 #include "Animate.h"
+#include <iostream>
 
 namespace ohms {
 namespace pvzanim {
@@ -156,32 +157,34 @@ Animate* AnimData::create(bool linearFI) {
 }
 
 void AnimData::listTrack() const {
-	printf_s("File \'%S\' at \'%S\':\n", m_fileName.c_str(), m_parentPath.c_str());
+	std::cerr << "File \'" << m_fileName << "\' at \'" << m_parentPath << "\':\n";
 	for (size_t i = 0, n = m_trackArray.size(); i < n; ++i) {
-		printf_s("%02zd: %s,\n", i, m_trackArray[i]->m_name.c_str());
+		std::cerr << std::format("{:02}: {},\n", i, m_trackArray[i]->m_name);
 	}
-	printf_s("Total: %zd. FPS: %d. Frame count: %zd.\n\n",
-			 m_trackArray.size(),
-			 m_fps,
-			 m_trackArray[0]->m_frameArray.size());
+	std::cerr << "Total: " << m_trackArray.size() << ". FPS: " << m_fps << ". Frame count: " << m_trackArray[0]->m_frameArray.size() << ".\n\n";
 	return;
 }
 
 void AnimData::listControlTrack() const {
-	printf_s("File \'%S\' at \'%S\':\n", m_fileName.c_str(), m_parentPath.c_str());
+	std::cerr << "File \'" << m_fileName << "\' at \'" << m_parentPath << "\':\n";
 	size_t i = 0;
 	for (AnimTrack* ii : m_trackArray) {
 		if (ii->m_name.find("anim_") != std::string::npos) {
-			printf_s("%02zd: %s,\n", i, ii->m_name.c_str());
+			std::cerr << std::format("{:02}: {},\n", i, ii->m_name);
 			++i;
 		}
 	}
-	printf_s("Total: %zd. FPS: %d. Frame count: %zd.\n\n",
-			 i,
-			 m_fps,
-			 m_trackArray[0]->m_frameArray.size());
+	std::cerr << "Total: " << m_trackArray.size() << ". FPS: " << m_fps << ". Frame count: " << m_trackArray[0]->m_frameArray.size() << ".\n\n";
 	return;
 
+}
+
+size_t AnimData::getTrackCount() const {
+    return m_trackArray.size();
+}
+
+const AnimTrack* AnimData::getTrack(size_t offset) const {
+	return m_trackArray[offset];
 }
 
 } // namespace pvzanim

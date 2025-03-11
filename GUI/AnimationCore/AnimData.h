@@ -54,6 +54,9 @@ public:
 
 	void listControlTrack() const;
 
+	size_t getTrackCount() const;
+	const AnimTrack* getTrack(size_t offset) const;
+
 protected:
 
 	bool m_available;

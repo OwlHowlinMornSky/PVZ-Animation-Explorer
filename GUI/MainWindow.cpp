@@ -4,6 +4,9 @@
 #include <Windows.h>
 #include "resource.h"
 
+#include <format>
+#include <iostream>
+
 namespace {
 
 //#define TIMER_SLAPSE (33)
@@ -14,6 +17,8 @@ std::function<void()> OnEnterSYSLOOP;
 std::function<void()> OnExitSYSLOOP;
 std::function<void()> OnSizing;
 std::function<void(bool, std::wstring_view)> OnOpenClose;
+std::function<void(size_t)> OnClickAnimTrack;
+std::function<void(size_t)> OnClickAnimTrackCtrl;
 
 LRESULT CALLBACK myWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -183,14 +188,26 @@ LRESULT CALLBACK myWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 			break;
 		case ID_40003:
 			break;
-		case ID_40004:
+		case ID_HELP:
 			DialogBoxW(GetModuleHandleW(NULL), MAKEINTRESOURCE(IDD_DIALOG1), hWnd, About);
 			break;
 		//case IDM_EXIT:
 		//	DestroyWindow(hWnd);
 		//	break;
 		default:
-			return DefWindowProc(hWnd, message, wParam, lParam);
+			if (wmId > 60002) {
+				return DefWindowProc(hWnd, message, wParam, lParam);
+			}
+			else if (wmId > 60000) {
+				OnClickAnimTrackCtrl(wmId - 60000);
+			}
+			else if (wmId >= 50000) {
+				OnClickAnimTrack(wmId - 50000);
+			}
+			else {
+				return DefWindowProc(hWnd, message, wParam, lParam);
+			}
+			break;
 		}
 	}
 	break;
@@ -287,6 +304,8 @@ void MainWindow::initialize_callback() {
 	OnEnterSYSLOOP = std::bind(&MainWindow::myEnterSYSLOOP, this);
 	OnExitSYSLOOP = std::bind(&MainWindow::myExitSYSLOOP, this);
 	OnOpenClose = std::bind(&MainWindow::onOpenClose, this, std::placeholders::_1, std::placeholders::_2);
+	OnClickAnimTrack = std::bind(&MainWindow::onClickAnimTrack, this, std::placeholders::_1);
+	OnClickAnimTrackCtrl = std::bind(&MainWindow::onClickAnimTrackCtrl, this, std::placeholders::_1);
 }
 
 void MainWindow::initialize_font_text() {
@@ -340,6 +359,7 @@ void MainWindow::initialize_window() {
 	app.create(hWnd0, sf::ContextSettings(0, 0, 8));
 	app.setSize({ 800, 600 });
 	app.setView(sf::View({ 0, 0, 800.0f, 600.0f }));
+	app.setVerticalSyncEnabled(true);
 
 	update_view();
 	return myExitSYSLOOP();
@@ -377,23 +397,17 @@ void MainWindow::initialize_animTrans() {
 }
 
 void MainWindow::update_textTrans() {
-	wchar_t tmp[64];
-	swprintf_s(tmp, 64, L"Scale: %.1f%%.\nRotate: %.1f°.", scaleRatio, rotateRatio);
-	return textTrans.setString(tmp);
+	return textTrans.setString(std::format(L"Scale: {:.1f}%.\nRotate: {:.1f}°.", scaleRatio, rotateRatio));
 }
 
 void MainWindow::update_textPos(float px, float py) {
 	if (px == INFINITY && py == 0.0f)
 		return textPos.setString("x: -, y:-.");
-	char tmp[64];
-	sprintf_s(tmp, 64, "x: %.2f, y: %.2f.", px, py);
-	return textPos.setString(tmp);
+	return textPos.setString(std::format("x: {:.2f}, y : {:.2f}.", px, py));
 }
 
 void MainWindow::update_textTimeScale() {
-	char tmp[64];
-	sprintf_s(tmp, 64, "Speed: %.0f%%.", timeScale / 0.1f);
-	return textTimeScale.setString(tmp);
+	return textTimeScale.setString(std::format("Speed: {:.0f}%.", timeScale / 0.1f));
 }
 
 void MainWindow::update_view() {
@@ -401,26 +415,207 @@ void MainWindow::update_view() {
 }
 
 void MainWindow::onOpenClose(bool isOpen, std::wstring_view file) {
+	timeScale = 10;
+	update_textTimeScale();
 	if (isOpen) {
 		testdata.load(file);
 		testdata.listControlTrack();
-		printf_s("LIST:\n\n");
 		testdata.listTrack();
 		test = testdata.create(true);
+
+		HMENU hmenu = GetMenu(app.getSystemHandle());
+		MENUITEMINFO info = {};
+		info.cbSize = sizeof(info);
+		info.fMask = MIIM_SUBMENU;
+
+		GetMenuItemInfoW(hmenu, 1, TRUE, &info);
+		if (info.hSubMenu != NULL) {
+			DestroyMenu(info.hSubMenu);
+			info.hSubMenu = NULL;
+		}
+		GetMenuItemInfoW(hmenu, 2, TRUE, &info);
+		if (info.hSubMenu != NULL) {
+			DestroyMenu(info.hSubMenu);
+			info.hSubMenu = NULL;
+		}
+
+		HMENU hm1 = CreateMenu(), hm2 = CreateMenu();
+		AppendMenuA(hm1, 0, 60001, "[Stop]");
+		AppendMenuA(hm1, MF_SEPARATOR, 61001, NULL);
+		AppendMenuA(hm2, 0, 60002, "[Enable All]");
+		AppendMenuA(hm2, MF_SEPARATOR, 61002, NULL);
+		if (size_t n = testdata.getTrackCount(); n > 0) {
+			for (size_t i = 0; i < n; ++i) {
+				auto name = testdata.getTrack(i)->getName();
+				if (name.find("anim_") != std::string::npos) {
+					AppendMenuA(hm1, 0, 50000 + i, testdata.getTrack(i)->getName().data());
+				}
+				else {
+					AppendMenuA(hm2, MF_CHECKED, 50000 + i, testdata.getTrack(i)->getName().data());
+				}
+			}
+		}
+
+		info.hSubMenu = hm1;
+		SetMenuItemInfoW(hmenu, 1, TRUE, &info);
+		info.hSubMenu = hm2;
+		SetMenuItemInfoW(hmenu, 2, TRUE, &info);
 	}
 	else {
 		delete this->test;
 		this->test = nullptr;
 		testdata.clear();
+
+		HMENU hmenu = GetMenu(app.getSystemHandle());
+		MENUITEMINFO info = {};
+		info.cbSize = sizeof(info);
+		info.fMask = MIIM_SUBMENU;
+
+		GetMenuItemInfoW(hmenu, 1, TRUE, &info);
+		if (info.hSubMenu != NULL) {
+			DestroyMenu(info.hSubMenu);
+			info.hSubMenu = NULL;
+			SetMenuItemInfoW(hmenu, 1, TRUE, &info);
+		}
+
+		GetMenuItemInfoW(hmenu, 2, TRUE, &info);
+		if (info.hSubMenu != NULL) {
+			DestroyMenu(info.hSubMenu);
+			info.hSubMenu = NULL;
+			SetMenuItemInfoW(hmenu, 2, TRUE, &info);
+		}
+	}
+}
+
+void MainWindow::onClickAnimTrack(size_t offset) {
+	if (!test || testdata.getTrackCount() <= offset)
+		return;
+	std::cout << offset;
+	auto name = testdata.getTrack(offset)->getName();
+	if (name.find("anim_") != std::string::npos) {
+		if (!test->setAnimation(name.data())) {
+			std::cerr << "Failed to set\'" << name << "\'!\n\n";
+			return;
+		}
+
+		HMENU hmenu = GetMenu(app.getSystemHandle());
+		MENUITEMINFO info = {};
+		info.cbSize = sizeof(info);
+		info.fMask = MIIM_SUBMENU;
+
+		GetMenuItemInfoW(hmenu, 1, TRUE, &info);
+		if (info.hSubMenu == NULL) {
+			return;
+		}
+
+		auto cnt = GetMenuItemCount(info.hSubMenu);
+		if (cnt == -1)
+			return;
+
+		HMENU m = info.hSubMenu;
+		info.hSubMenu = NULL;
+		info.fMask = MIIM_STATE;
+		info.fState = 0;
+		for (int i = 2; i < cnt; ++i) {
+			SetMenuItemInfoW(m, i, TRUE, &info);
+		}
+		info.fState = MFS_CHECKED;
+		SetMenuItemInfoW(m, 50000 + offset, FALSE, &info);
+	}
+	else {
+		HMENU hmenu = GetMenu(app.getSystemHandle());
+		MENUITEMINFO info = {};
+		info.cbSize = sizeof(info);
+		info.fMask = MIIM_SUBMENU;
+
+		GetMenuItemInfoW(hmenu, 2, TRUE, &info);
+		if (info.hSubMenu == NULL) {
+			return;
+		}
+
+		hmenu = info.hSubMenu;
+		info.hSubMenu = NULL;
+		info.fMask = MIIM_STATE;
+		GetMenuItemInfoW(hmenu, 50000 + offset, FALSE, &info);
+
+		if (info.fState & MFS_CHECKED) {
+			test->setFragmentDisabled(name.data(), true);
+			info.fState = 0;
+		}
+		else {
+			test->setFragmentDisabled(name.data(), false);
+			info.fState = MFS_CHECKED;
+		}
+
+		SetMenuItemInfoW(hmenu, 50000 + offset, FALSE, &info);
+	}
+}
+
+void MainWindow::onClickAnimTrackCtrl(size_t offset) {
+	switch (offset) {
+	case 1:
+	{
+		test->stop();
+
+		HMENU hmenu = GetMenu(app.getSystemHandle());
+		MENUITEMINFO info = {};
+		info.cbSize = sizeof(info);
+		info.fMask = MIIM_SUBMENU;
+
+		GetMenuItemInfoW(hmenu, 1, TRUE, &info);
+		if (info.hSubMenu == NULL) {
+			return;
+		}
+
+		auto cnt = GetMenuItemCount(info.hSubMenu);
+		if (cnt == -1)
+			return;
+
+		HMENU m = info.hSubMenu;
+		info.hSubMenu = NULL;
+		info.fMask = MIIM_STATE;
+		info.fState = 0;
+		for (int i = 2; i < cnt; ++i) {
+			SetMenuItemInfoW(m, i, TRUE, &info);
+		}
+		break;
+	}
+	case 2:
+	{
+		test->enableAllFragments();
+
+		HMENU hmenu = GetMenu(app.getSystemHandle());
+		MENUITEMINFO info = {};
+		info.cbSize = sizeof(info);
+		info.fMask = MIIM_SUBMENU;
+
+		GetMenuItemInfoW(hmenu, 2, TRUE, &info);
+		if (info.hSubMenu == NULL) {
+			return;
+		}
+
+		auto cnt = GetMenuItemCount(info.hSubMenu);
+		if (cnt == -1)
+			return;
+
+		hmenu = info.hSubMenu;
+		info.hSubMenu = NULL;
+		info.fMask = MIIM_STATE;
+		info.fState = MFS_CHECKED;
+		for (int i = 2; i < cnt; ++i) {
+			SetMenuItemInfoW(hmenu, i, TRUE, &info);
+		}
+		break;
+	}
 	}
 }
 
 void MainWindow::myEnterSYSLOOP() {
-	return app.setFramerateLimit(0);
+	//return app.setFramerateLimit(0);
 }
 
 void MainWindow::myExitSYSLOOP() {
-	return app.setFramerateLimit(60);
+	//return app.setFramerateLimit(60);
 }
 
 void MainWindow::myIdle() {
