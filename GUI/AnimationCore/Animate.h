@@ -43,6 +43,7 @@ public:
 	~Animate() {}
 
 	bool setAnimation(const std::string& name);
+	bool setEntireTrack();
 	void stop();
 
 	void update(float dt);

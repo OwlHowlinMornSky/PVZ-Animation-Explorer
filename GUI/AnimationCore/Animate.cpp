@@ -41,7 +41,7 @@ bool Animate::setAnimation(const std::string& name) {
 	if (!m_dataRef.m_available)
 		return false;
 
-	if (m_playInfo.ctrlTrackRef && name == m_playInfo.ctrlTrackRef->m_name) {
+	if (m_playInfo.ctrlTrackRef && (size_t)m_playInfo.ctrlTrackRef != 1 && name == m_playInfo.ctrlTrackRef->m_name) {
 		m_playInfo.timePoint = 0.0f;
 		update(0.0f);
 		return true;
@@ -147,6 +147,75 @@ bool Animate::setAnimation(const std::string& name) {
 	return true;
 }
 
+bool Animate::setEntireTrack() {
+	m_playInfo.timePoint = 0.0f;
+	m_playInfo.trackOffset = 0;
+	m_playInfo.trackLength = m_dataRef.m_frameCount - 1;
+	m_playInfo.ctrlTrackRef = (ohms::pvzanim::AnimTrack*)0x1;
+	m_playInfo.lastFramePoint = m_dataRef.m_frameCount;
+
+	for (size_t i = 0; i < m_playInfo.trackCount; ++i) {
+		TrackFragData& ii = m_playInfo.fragments[i];
+
+		for (size_t j = 0; j <= m_playInfo.trackOffset; ++j) {
+			const FrameData& tf = m_dataRef.m_trackArray[i]->getFrame(j);
+
+			ii.isEmpty = tf.isEmpty;
+			if (tf.imName != "NULL") {
+				ii.texture.loadFromFile((m_dataRef.m_parentPath / (tf.imName + ".png")).string());
+				ii.texture.setSmooth(true);
+				ii.texture.generateMipmap();
+				ii.texSize = ii.texture.getSize();
+			}
+		}
+
+		const FrameData& thisFrame = m_dataRef.m_trackArray[i]->getFrame(m_playInfo.trackOffset);
+
+		float lpx, lpy, lkx, lky, lsx, lsy, lap, coskx, sinkx, cosky, sinky;
+
+		lpx = thisFrame.px;
+		lpy = thisFrame.py;
+		lkx = thisFrame.kx * 3.1415926535897932f / 180.0f;
+		lky = thisFrame.ky * 3.1415926535897932f / 180.0f;
+		lsx = thisFrame.sx;
+		lsy = thisFrame.sy;
+		lap = thisFrame.a * 256.0f;
+
+		int16_t lALPHA = static_cast<int16_t>(lap);
+		if (lALPHA > 255) lALPHA = 255;
+		else if (lALPHA < 0) lALPHA = 0;
+
+		coskx = cos(lkx);
+		sinkx = sin(lkx);
+		cosky = cos(lky);
+		sinky = sin(lky);
+
+		ii.vertex[0].position = ii.vertex[0].texCoords = { 0.0f, 0.0f };
+		ii.vertex[1].position = ii.vertex[1].texCoords = { (float)ii.texSize.x, 0.0f };
+		ii.vertex[2].position = ii.vertex[2].texCoords = { 0.0f, (float)ii.texSize.y };
+		ii.vertex[3].position = ii.vertex[3].texCoords = { (float)ii.texSize.x, (float)ii.texSize.y };
+
+		for (unsigned char i = 0; i < 4; ++i) {
+			ii.vertex[i].position.x *= lsx;
+			ii.vertex[i].position.y *= lsy;
+		}
+
+		for (unsigned char i = 0; i < 4; ++i) {
+			ii.vertex[i].position = { ii.vertex[i].position.x * coskx - ii.vertex[i].position.y * sinky,
+				ii.vertex[i].position.x * sinkx + ii.vertex[i].position.y * cosky };
+		}
+
+		for (unsigned char i = 0; i < 4; ++i) {
+			ii.vertex[i].position += { lpx, lpy };
+			ii.vertex[i].color = { 255, 255, 255, static_cast<uint8_t>(lALPHA) };
+		}
+	}
+
+	std::cerr << "Animation: Set entire track. Length: " << m_playInfo.trackLength << ".\n\n";
+
+	return true;
+}
+
 void Animate::stop() {
 	if (m_playInfo.ctrlTrackRef) {
 		m_playInfo.timePoint = 0.0f;
@@ -197,7 +266,7 @@ void Animate::update(float dt) {
 			m_dataRef.m_trackArray[i]->getFrame(m_playInfo.lastFramePoint + m_playInfo.trackOffset);
 		const FrameData& nextFrame =
 			m_dataRef.m_trackArray[i]->getFrame(
-				(m_playInfo.lastFramePoint + m_playInfo.trackOffset < m_dataRef.m_trackArray[i]->m_frameArray.size()) ?
+				(m_playInfo.lastFramePoint + m_playInfo.trackOffset + 1 < m_dataRef.m_trackArray[i]->m_frameArray.size()) ?
 				m_playInfo.lastFramePoint + m_playInfo.trackOffset + 1 :
 				m_playInfo.trackOffset
 			);
@@ -377,7 +446,7 @@ void Animate::setFragmentDisabled(const std::string& name, bool disabled) {
 }
 
 void Animate::enableAllFragments() {
-	for (int i = 0, n = m_playInfo.trackCount; i < n; ++i)
+	for (size_t i = 0, n = m_playInfo.trackCount; i < n; ++i)
 		m_playInfo.fragments[i].disabled = false;
 }
 

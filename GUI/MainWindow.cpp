@@ -195,7 +195,7 @@ LRESULT CALLBACK myWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 		//	DestroyWindow(hWnd);
 		//	break;
 		default:
-			if (wmId > 60002) {
+			if (wmId > 60003) {
 				return DefWindowProc(hWnd, message, wParam, lParam);
 			}
 			else if (wmId > 60000) {
@@ -441,9 +441,11 @@ void MainWindow::onOpenClose(bool isOpen, std::wstring_view file) {
 
 		HMENU hm1 = CreateMenu(), hm2 = CreateMenu();
 		AppendMenuA(hm1, 0, 60001, "[Stop]");
-		AppendMenuA(hm1, MF_SEPARATOR, 61001, NULL);
+		AppendMenuA(hm1, MF_SEPARATOR, 61004, NULL);
+		AppendMenuA(hm1, 0, 60003, "[Entire Track]");
+		AppendMenuA(hm1, MF_SEPARATOR, 61005, NULL);
 		AppendMenuA(hm2, 0, 60002, "[Enable All]");
-		AppendMenuA(hm2, MF_SEPARATOR, 61002, NULL);
+		AppendMenuA(hm2, MF_SEPARATOR, 61006, NULL);
 		if (size_t n = testdata.getTrackCount(); n > 0) {
 			for (size_t i = 0; i < n; ++i) {
 				auto name = testdata.getTrack(i)->getName();
@@ -490,7 +492,7 @@ void MainWindow::onOpenClose(bool isOpen, std::wstring_view file) {
 void MainWindow::onClickAnimTrack(size_t offset) {
 	if (!test || testdata.getTrackCount() <= offset)
 		return;
-	std::cout << offset;
+	std::cerr << offset;
 	auto name = testdata.getTrack(offset)->getName();
 	if (name.find("anim_") != std::string::npos) {
 		if (!test->setAnimation(name.data())) {
@@ -520,7 +522,7 @@ void MainWindow::onClickAnimTrack(size_t offset) {
 			SetMenuItemInfoW(m, i, TRUE, &info);
 		}
 		info.fState = MFS_CHECKED;
-		SetMenuItemInfoW(m, 50000 + offset, FALSE, &info);
+		SetMenuItemInfoW(m, 50000 + (unsigned int)offset, FALSE, &info);
 	}
 	else {
 		HMENU hmenu = GetMenu(app.getSystemHandle());
@@ -536,7 +538,7 @@ void MainWindow::onClickAnimTrack(size_t offset) {
 		hmenu = info.hSubMenu;
 		info.hSubMenu = NULL;
 		info.fMask = MIIM_STATE;
-		GetMenuItemInfoW(hmenu, 50000 + offset, FALSE, &info);
+		GetMenuItemInfoW(hmenu, 50000 + (unsigned int)offset, FALSE, &info);
 
 		if (info.fState & MFS_CHECKED) {
 			test->setFragmentDisabled(name.data(), true);
@@ -547,7 +549,7 @@ void MainWindow::onClickAnimTrack(size_t offset) {
 			info.fState = MFS_CHECKED;
 		}
 
-		SetMenuItemInfoW(hmenu, 50000 + offset, FALSE, &info);
+		SetMenuItemInfoW(hmenu, 50000 + (unsigned int)offset, FALSE, &info);
 	}
 }
 
@@ -605,6 +607,38 @@ void MainWindow::onClickAnimTrackCtrl(size_t offset) {
 		for (int i = 2; i < cnt; ++i) {
 			SetMenuItemInfoW(hmenu, i, TRUE, &info);
 		}
+		break;
+	}
+	case 3:
+	{
+		if (!test->setEntireTrack()) {
+			std::cerr << "Failed to set entire track!\n\n";
+			return;
+		}
+
+		HMENU hmenu = GetMenu(app.getSystemHandle());
+		MENUITEMINFO info = {};
+		info.cbSize = sizeof(info);
+		info.fMask = MIIM_SUBMENU;
+
+		GetMenuItemInfoW(hmenu, 1, TRUE, &info);
+		if (info.hSubMenu == NULL) {
+			return;
+		}
+
+		auto cnt = GetMenuItemCount(info.hSubMenu);
+		if (cnt == -1)
+			return;
+
+		HMENU m = info.hSubMenu;
+		info.hSubMenu = NULL;
+		info.fMask = MIIM_STATE;
+		info.fState = 0;
+		for (int i = 4; i < cnt; ++i) {
+			SetMenuItemInfoW(m, i, TRUE, &info);
+		}
+		info.fState = MFS_CHECKED;
+		SetMenuItemInfoW(m, 2, TRUE, &info);
 		break;
 	}
 	}
